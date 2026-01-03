@@ -6,6 +6,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 
 // 1️⃣【追加】フロントエンド（HTML/JS/画像）をブラウザに表示させる設定
