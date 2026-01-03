@@ -11,10 +11,6 @@ const isFirstVisit = !localStorage.getItem("visited");
 
 localStorage.setItem("visited", "true");
 
-
-
-const isFirstVisit = !localStorage.getItem("visited");
-
 getAiMessage("", "init", isFirstVisit)
   .then(message => {
     msgElement.textContent = message;
