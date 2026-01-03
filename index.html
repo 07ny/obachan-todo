@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>おばちゃんメモ</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #c7dcf5;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      color: #4A90E2;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    /* 入力エリア */
+    .input-area {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    #todoInput {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    #todoInput:focus {
+      border-color: #7aa2ff;
+    }
+
+    #addTodoBtn {
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background-color: #7aa2ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* セクション */
+    .todo-section {
+      margin-top: 24px;
+    }
+
+    .todo-section h2 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #4A90E2;
+    }
+
+    .todo-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* TODOカード */
+    .todo-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .todo-item.completed {
+      background-color: #f0f0f0;
+    }
+
+    /* チェックボックス */
+    .checkbox input {
+      display: none;
+    }
+
+    .checkbox {
+      cursor: pointer;
+    }
+
+    .checkmark {
+      width: 20px;
+      height: 20px;
+      background-color: #eee;
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox input:checked + .checkmark {
+      background-color: #7aa2ff;
+    }
+
+    .checkbox input:checked + .checkmark::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      width: 6px;
+      height: 12px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* テキスト */
+    .todo-text {
+      font-size: 14px;
+    }
+
+    .todo-item.completed .todo-text {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    /* ボタン */
+    button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #8cbce9;
+      color: white;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #f0ad4e;
+      font-size: 14px;
+    }
+    .delete-btn {
+      background-color: #d9534f;
+      opacity: 0.9;
+    }
+    .todo-content{
+        flex: 1;
+        min-width:0;
+    }
+    .todo-text{
+        font-size:14px;
+        display:block;
+        word-wrap:break-word;
+        overflow-wrap:break-word;
+        white-space:normal;
+    }
+    .tab-area{
+        display:flex;
+        gap:10px;
+        justify-content:center;
+        margin-bottom:20px;
+    }
+    .tab-btn{
+        background-color: #eee;
+        color: #666;
+        border-radius: 20px;
+        padding: 8px 16px;
+    }
+    .tab-btn.active{
+        background-color: #7aa2ff;
+        color: white;
+    }
+    .ai-placeholder{
+        color:#999;
+        font-style: italic;
+    }
+    .ai-box{
+        display:flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .ai-avatar{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
+    #aiMessage{
+        text-align:center;
+        color:#4A90E2;
+        font-style: italic;
+        font-weight: bold;
+        background-color: #f1f1f1;
+        padding: 10px 10px;
+        border-radius: 8px;
+
+        min-height: 1.5em;
+        height: auto;
+        margin-bottom: 20px;
+        display: block;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.5;
+    }
+    .ai-placeholder{
+        color:#999;
+        font-style: italic;
+    }
+    .thinking{
+        animation:bounce 1s infinite;
+    }
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }   
+
+  </style>
+
+  <link
+  rel="stylesheet"
+  href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+/>
+
+
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>おばちゃんメモ</h1>
+
+    <div class="ai-box">
+        <img
+            id="aiAvatar"
+            src="thinking.png"
+            alt="AIキャラ"
+            class="ai-avatar"
+        >
+        <p id="aiMessage" class="ai-placeholder">
+            TODOを入力するとAIが応援するよ！
+        </p>
+    </div>
+
+    <div class="input-area">
+      <input id="todoInput" type="text" placeholder="TODOを入力">
+      <button id="addButton" class="add-btn">追加</button>
+    </div>
+
+    <div class="tab-area">
+        <button class="tab-btn active" data-filter="all">すべて</button>
+        <button class="tab-btn" data-filter="active">未完了</button>
+        <button class="tab-btn" data-filter="completed">完了</button>
+    </div>
+
+    <div class="todo-section">
+      <h2>未完了のTODO (<span id="activeCount">0</span>)</h2>
+      <ul id="todoListActive"></ul>
+    </div>
+
+    <div class="todo-section">
+      <h2>完了したTODO (<span id="completedCount">0</span>)</h2>
+      <ul id="todoListCompleted"></ul>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+
+</body>
+</html>
