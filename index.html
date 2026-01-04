@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>おばちゃんメモ</title>
 
@@ -8,7 +9,7 @@
     body {
       font-family: sans-serif;
       background-color: #c7dcf5;
-      padding: 40px;
+      padding: 20px 10px;
     }
 
     h1 {
@@ -21,9 +22,10 @@
       max-width: 480px;
       margin: 0 auto;
       background: white;
-      padding: 32px;
+      padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      box-sizing: border-box;
     }
 
     /* 入力エリア */
@@ -190,8 +192,8 @@
         margin-bottom: 20px;
     }
     .ai-avatar{
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
         box-shadow: 0 6px 15px rgba(0,0,0,0.25);
@@ -227,7 +229,11 @@
         50% {
             transform: translateY(-10px);
         }
-    }   
+    }
+    button, .tab-btn, .edit-btn, .delete-btn {
+    min-height: 44px; /* Appleが推奨してる「押しやすい」最小サイズ */
+    min-width: 44px;
+}
 
   </style>
 
