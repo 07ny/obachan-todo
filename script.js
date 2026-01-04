@@ -166,40 +166,63 @@ function render() {
     deleteBtn.className = "delete-btn";
 
     // 編集ロジック
-    let editing = false;
-    editBtn.onclick = () => {
-      if (!editing) {
-        editing = true;
-        editBtn.textContent = "保存";
+  // 編集ロジック
+    let isEditing = false; // 名前を分かりやすく変更
+
+    editBtn.addEventListener("click", () => {
+      if (!isEditing) {
+        // --- 編集モード開始 ---
+        isEditing = true;
+        editBtn.innerHTML = "<i class='fa-solid fa-check'></i>"; // 保存アイコンに変更
+        
         const inputEdit = document.createElement("input");
         inputEdit.type = "text";
         inputEdit.className = "edit-input";
         inputEdit.value = todo.text;
         inputEdit.style.width = "100%";
         
-        contentBox.replaceChild(inputEdit, textSpan);
+        contentBox.innerHTML = ""; // 一旦空にする
+        contentBox.appendChild(inputEdit);
         inputEdit.focus();
 
-        // 保存実行関数
-        const saveEdit = () => {
+        const finishEditing = () => {
           const newText = inputEdit.value.trim();
-          if (newText) todo.text = newText;
-          editing = false;
-          save();
-          render();
+          if (newText) {
+            todo.text = newText;
+            save();
+          }
+          isEditing = false;
+          render(); // 再描画して元に戻す
         };
 
-        editBtn.onclick = saveEdit;
-        inputEdit.onkeydown = (e) => { if (e.key === "Enter") saveEdit(); };
+        // エンターキーで保存
+        inputEdit.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") finishEditing();
+        });
+        
+        // フォーカスが外れたら保存（任意）
+        inputEdit.addEventListener("blur", () => {
+          // 少し待たないとクリックイベントと競合する場合があるため
+          setTimeout(finishEditing, 100); 
+        });
+
+      } else {
+        // --- 保存ボタンとして機能（アイコンがチェックの時） ---
+        // inputEditはスコープ外なので、DOMから値を取るかrender()に任せる
+        render(); 
       }
-    };
+    });
 
     // 削除ロジック
     deleteBtn.onclick = () => {
-      todos = todos.filter(t => t.id !== todo.id);
-      save();
-      render();
+      if(confirm("これ、ほんまに消してええのん？")) {
+        todos = todos.filter(t => t.id !== todo.id);
+        save();
+        render();
+      }
     };
+
+    
 
     rightBox.append(editBtn, deleteBtn);
     li.append(label, contentBox, rightBox);
