@@ -477,7 +477,9 @@ function render() {
 
     // 編集ロジック
     let isEditing = false;
-    editBtn.addEventListener("click", () => {
+    
+    // addEventListener を onclick に変更
+    editBtn.onclick = () => {
       if (!isEditing) {
         isEditing = true;
         editBtn.innerHTML = "<i class='fa-solid fa-check'></i>";
@@ -510,15 +512,14 @@ function render() {
           setTimeout(finishEditing, 100);
         });
       }
-    });
+    };
 
 // 削除ロジック
-    deleteBtn.addEventListener("click", () => {
-      // ボタンを押したときに、ここで確認を出す
-      if (confirm("これ、ほんまに消してええのん？")) {
-        deleteTodo(todo.id);
-      }
-    });
+    deleteBtn.onclick = () => {
+          if (confirm("これ、ほんまに消してええのん？")) {
+            deleteTodo(todo.id);
+          }
+        };
 
     rightBox.append(editBtn, deleteBtn);
     li.append(label, contentBox, rightBox);
