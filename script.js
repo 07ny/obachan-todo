@@ -356,9 +356,6 @@ async function updateTodoText(todo, newText) {
 // TODO削除
 async function deleteTodo(todoId) {
   if (!currentUser) return;
-
-  if (!confirm("これ、ほんまに消してええのん？")) return;
-
   try {
     const todoRef = doc(db, "users", currentUser.uid, "todos", todoId);
     await deleteDoc(todoRef);
@@ -515,8 +512,13 @@ function render() {
       }
     });
 
-    // 削除ロジック
-    deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
+// 削除ロジック
+    deleteBtn.addEventListener("click", () => {
+      // ボタンを押したときに、ここで確認を出す
+      if (confirm("これ、ほんまに消してええのん？")) {
+        deleteTodo(todo.id);
+      }
+    });
 
     rightBox.append(editBtn, deleteBtn);
     li.append(label, contentBox, rightBox);
