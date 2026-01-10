@@ -542,7 +542,7 @@ function render() {
 // ===== AI連携 =====
 async function getAiMessage(taskText, type, isFirstVisit = false) {
   try {
-    const response = await fetch('http://localhost:3000/api/message', {
+    const response = await fetch('/api/message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ taskText, type, isFirstVisit })
